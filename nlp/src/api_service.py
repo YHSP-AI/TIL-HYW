@@ -30,13 +30,11 @@ async def extract(instance: Request):
     """
     # get transcription, and pass to NLP model
     request_dict = await instance.json()
+    batch_size = config.batch_size
 
-    predictions = []
-    # TODO: set up batching, batch size should be configurable
-    for instance in request_dict["instances"]:
-        # each is a dict with one key "transcript" and the transcription as a string
-        answers = nlp_manager.qa(instance["transcript"])
-        predictions.append(answers)
+    predictions = [pred.model_dump() for pred in nlp_manager.qa(
+        request_dict["instances"], batch_size=batch_size
+    )]
 
     # TODO: serialize with orjson instead of default used by fastapi to squeeze out extra speed
     return {"predictions": predictions}

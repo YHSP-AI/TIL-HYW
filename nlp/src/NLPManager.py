@@ -1,11 +1,9 @@
-from typing import Dict
+from src.schema import TargetFormat
 
 
 class NLPManager:
     def __init__(self):
-        # initialize the model here
         pass
 
-    def qa(self, context: str) -> Dict[str, str]:
-        # perform NLP question-answering
-        return {"heading": "", "tool": "", "target": ""}
+    def qa(self, texts: list[str], batch_size: int = 64) -> list[TargetFormat]:
+        return []
