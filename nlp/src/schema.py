@@ -11,3 +11,5 @@ class TargetFormat(BaseModel):
     target: str
     tool: str
     heading: str = Field(pattern="[0-9][0-9][0-9]")
+
+target_schema = TargetFormat.model_json_schema()
