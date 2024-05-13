@@ -1,0 +1,4 @@
+typer
+transformers
+torch
+huggingface_hub
