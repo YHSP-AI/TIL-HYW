@@ -21,7 +21,7 @@ class LCPPInferenceBackend(NLPInferenceBackend):
 
         # Use LM Format Enforcer to force output
         # to conform to JSON schema
-        self.llm = Llama(model_path=self.path)
+        self.llm = Llama(model_path=self.path, n_gpu_layers=-1)
         self.tokenizer_data = build_token_enforcer_tokenizer_data(self.llm)
         self.schema = JsonSchemaParser(target_schema)
         self.logits_processors = LogitsProcessorList([

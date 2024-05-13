@@ -1,7 +1,7 @@
 from abc import ABC
 
 class NLPInferenceBackend(ABC):
-    def __init__(self):
+    def __init__(self, **kwargs):
         # Initialize inference backend
         pass
 
@@ -11,4 +11,4 @@ class NLPInferenceBackend(ABC):
             batch_size: int = 128,
             **kwargs
     ) -> list[str]:
-        raise NotImplementedError
+        return []
