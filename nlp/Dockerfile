@@ -18,10 +18,13 @@ WORKDIR /workspace
 
 # install other requirements
 COPY requirements.txt .
-RUN pip install -r requirements.txt
+RUN pip install -r requirements.txt --extra-index-url https://abetlen.github.io/llama-cpp-python/whl/cu121
 
 # copy the rest of the files into the container
 COPY src .
+
+# Get model
+ADD https://huggingface.co/NousResearch/Hermes-2-Theta-Llama-3-8B-GGUF/resolve/main/Hermes-2-Pro-Llama-3-Instruct-Merged-DPO-Q4_K_M.gguf?download=true models/Hermes-2-Pro-Llama-3-Instruct-Merged-DPO-Q4_K_M.gguf
 
 # start model service
 CMD uvicorn api_service:app --port 5002 --host 0.0.0.0

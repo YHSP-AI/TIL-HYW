@@ -3,7 +3,8 @@ pydantic
 pydantic-settings
 lm-format-enforcer
 llama-cpp-python
-exllamav2
-transformers
+# exllamav2
+transformers==4.37.0
 torch
 huggingface_hub
+# vllm
