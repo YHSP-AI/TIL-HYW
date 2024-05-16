@@ -5,4 +5,4 @@ install:
 
 dev:
 	source venv/bin/activate && \
-	fastapi dev src/api_service.py
+	fastapi dev src/api_service.py --port 5002

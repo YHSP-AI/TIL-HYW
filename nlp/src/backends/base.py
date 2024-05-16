@@ -7,7 +7,7 @@ class NLPInferenceBackend(ABC):
 
     def infer(
             self,
-            inputs: list[str],
+            inputs: list[list[dict]],
             batch_size: int = 128,
             **kwargs
     ) -> list[str]:

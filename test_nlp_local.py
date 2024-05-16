@@ -43,7 +43,7 @@ def run_batched(
     for index in tqdm(range(0, len(instances), batch_size)):
         _instances = instances[index : index + batch_size]
         response = requests.post(
-            "http://localhost:8000/extract",
+            "http://localhost:5002/extract",
             data=json.dumps(
                 {
                     "instances": [
