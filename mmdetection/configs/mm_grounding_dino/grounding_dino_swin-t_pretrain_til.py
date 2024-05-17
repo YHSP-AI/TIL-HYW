@@ -154,11 +154,11 @@ train_pipeline = [
             ]
         ]),
     dict(type='FilterAnnotations', min_gt_bbox_wh=(1e-2, 1e-2)),
-    dict(
-        type='RandomSamplingNegPos',
-        tokenizer_name=lang_model_name,
-        num_sample_negative=85,
-        max_tokens=256),
+    # dict(
+    #     type='RandomSamplingNegPos',
+    #     tokenizer_name=lang_model_name,
+    #     num_sample_negative=85,
+    #     max_tokens=256),
     dict(
         type='PackDetInputs',
         meta_keys=('img_id', 'img_path', 'ori_shape', 'img_shape',
@@ -175,7 +175,7 @@ test_pipeline = [
     #     scale=(800, 1333),
     #     keep_ratio=True,
     #     backend='pillow'),
-    dict(type='LoadAnnotations', with_bbox=True),
+    # dict(type='LoadAnnotations', with_bbox=True),
     dict(
         type='PackDetInputs',
         meta_keys=('img_id', 'img_path', 'ori_shape', 'img_shape',
@@ -184,14 +184,14 @@ test_pipeline = [
 ]
 
 dataset_type = 'ODVGDataset'
-data_root = 'data/objects365v1/'
+data_root = '/home/jupyter/TIL Competition Codes/TIL-HYW/advanced'
 
 coco_od_dataset = dict(
     type=dataset_type,
     data_root=data_root,
-    ann_file='o365v1_train_odvg.json',
-    label_map_file='o365v1_label_map.json',
-    data_prefix=dict(img='train/'),
+    ann_file='mm_grounding_format.jsonl',
+    label_map_file='mm_grounding_dino_category_mapping.json',
+    data_prefix=dict(img=''),
     filter_cfg=dict(filter_empty_gt=False),
     pipeline=train_pipeline,
     return_classes=True,
@@ -207,7 +207,7 @@ train_dataloader = dict(
     dataset=dict(type='ConcatDataset', datasets=[coco_od_dataset]))
 
 val_dataloader =dict(
-    dataset=dict(pipeline=test_pipeline, return_classes=True))
+    dataset=dict(pipeline=test_pipeline, return_classes=True , ann_file = ''))
 test_dataloader = val_dataloader
 
 optim_wrapper = dict(

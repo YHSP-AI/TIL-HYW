@@ -37,12 +37,12 @@ train_pipeline = [
                     keep_ratio=True)
             ]
         ]),
-    dict(
-        type='RandomSamplingNegPos',
-        tokenizer_name=_base_.lang_model_name,
-        num_sample_negative=20,  # ======= important =====
-        label_map_file='data/coco/annotations/coco2017_label_map.json',
-        max_tokens=256),
+    # dict(
+    #     type='RandomSamplingNegPos',
+    #     tokenizer_name=_base_.lang_model_name,
+    #     num_sample_negative=20,  # ======= important =====
+    #     label_map_file='data/coco/annotations/coco2017_label_map.json',
+    #     max_tokens=256),
     dict(
         type='PackDetInputs',
         meta_keys=('img_id', 'img_path', 'ori_shape', 'img_shape',
@@ -54,7 +54,7 @@ train_dataloader = dict(
     dataset=dict(
         _delete_=True,
         type='ODVGDataset',
-        need_text=False,
+        need_text=True,
         data_root=data_root,
         ann_file='annotations/instances_train2017_od.json',
         label_map_file='annotations/coco2017_label_map.json',

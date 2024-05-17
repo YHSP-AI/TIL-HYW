@@ -2,11 +2,6 @@ _base_ = '../grounding_dino_swin-t_pretrain_obj365.py'
 
 data_root = 'data/coco/'
 
-model = dict(test_cfg=dict(
-    max_per_img=300,
-    chunked_size=40,
-))
-
 train_pipeline = [
     dict(type='LoadImageFromFile'),
     dict(type='LoadAnnotations', with_bbox=True),
@@ -42,13 +37,11 @@ train_pipeline = [
                     keep_ratio=True)
             ]
         ]),
-    dict(type='FilterAnnotations', min_gt_bbox_wh=(1e-2, 1e-2)),
     # dict(
     #     type='RandomSamplingNegPos',
     #     tokenizer_name=_base_.lang_model_name,
-    #     num_sample_negative=85,
-    #     # change this
-    #     label_map_file='data/coco/annotations/lvis_v1_label_map.json',
+    #     num_sample_negative=20,  # ======= important =====
+    #     label_map_file='data/coco/annotations/coco2017_label_map.json',
     #     max_tokens=256),
     dict(
         type='PackDetInputs',
@@ -60,44 +53,26 @@ train_pipeline = [
 train_dataloader = dict(
     dataset=dict(
         _delete_=True,
-        type='ClassBalancedDataset',
-        oversample_thr=1e-3,
-        dataset=dict(
-            type='ODVGDataset',
-            data_root=data_root,
-            need_text=False,
-            label_map_file='annotations/lvis_v1_label_map.json',
-            ann_file='annotations/lvis_v1_train_od.json',
-            data_prefix=dict(img=''),
-            filter_cfg=dict(filter_empty_gt=False, min_size=32),
-            return_classes=True,
-            pipeline=train_pipeline)))
-
-val_dataloader = dict(
-    dataset=dict(
+        type='ODVGDataset',
+        need_text=True,
         data_root=data_root,
-        type='LVISV1Dataset',
-        ann_file='annotations/lvis_v1_minival_inserted_image_name.json',
-        data_prefix=dict(img='')))
-test_dataloader = val_dataloader
-
-val_evaluator = dict(
-    _delete_=True,
-    type='LVISFixedAPMetric',
-    ann_file=data_root +
-    'annotations/lvis_v1_minival_inserted_image_name.json')
-test_evaluator = val_evaluator
+        ann_file='annotations/instances_train2017_od.json',
+        label_map_file='annotations/coco2017_label_map.json',
+        data_prefix=dict(img='train2017/'),
+        return_classes=True,
+        filter_cfg=dict(filter_empty_gt=False, min_size=32),
+        pipeline=train_pipeline))
 
 optim_wrapper = dict(
     _delete_=True,
     type='OptimWrapper',
-    optimizer=dict(type='AdamW', lr=0.0002, weight_decay=0.0001),
+    optimizer=dict(type='AdamW', lr=0.00005, weight_decay=0.0001),
     clip_grad=dict(max_norm=0.1, norm_type=2),
     paramwise_cfg=dict(
         custom_keys={
             'absolute_pos_embed': dict(decay_mult=0.),
             'backbone': dict(lr_mult=0.1),
-            # 'language_model': dict(lr_mult=0),
+            # 'language_model': dict(lr_mult=0.0),
         }))
 
 # learning policy
@@ -108,13 +83,11 @@ param_scheduler = [
         begin=0,
         end=max_epochs,
         by_epoch=True,
-        milestones=[11],
+        milestones=[8, 11],
         gamma=0.1)
 ]
-train_cfg = dict(max_epochs=max_epochs, val_interval=3)
+train_cfg = dict(max_epochs=max_epochs, val_interval=1)
 
-default_hooks = dict(
-    checkpoint=dict(
-        max_keep_ckpts=1, save_best='lvis_fixed_ap/AP', rule='greater'))
+default_hooks = dict(checkpoint=dict(max_keep_ckpts=1, save_best='auto'))
 
 load_from = 'https://download.openmmlab.com/mmdetection/v3.0/mm_grounding_dino/grounding_dino_swin-t_pretrain_obj365_goldg_grit9m_v3det/grounding_dino_swin-t_pretrain_obj365_goldg_grit9m_v3det_20231204_095047-b448804b.pth'  # noqa
