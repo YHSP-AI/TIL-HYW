@@ -1,4 +1,6 @@
+from textwrap import dedent
 from typing import List
+from json import dumps
 
 from src.schema import target_schema, TargetFormat
 from src.config import Settings
@@ -12,65 +14,53 @@ class NLPManager:
         self.backend = InferenceBackendFactory().create(
             config.inference_backend, model_path=config.model_path
         )
+        self.system_prompt = f"""
+You are an AI assistant integrated into a critical military defense system for engaging enemy targets. Your task is to convert voice transcripts from turret operators into precisely formatted JSON commands to be sent to the turrets. Incorrect outputs could result in unintended casualties, so it is essential that you strictly follow the specified JSON schema and formatting rules.
 
-    def generate_prompt(self, text: str) -> list[dict]:
+When processing a transcript, use the verbatim wording from the operator whenever possible. The only exception is the 'heading' field, which must always be a 3-digit number representing the compass bearing of the target (e.g., 051).
+
+# Examples
+Here are some examples of valid operator transcripts and their expected JSON outputs:
+
+## Example 1
+### Input
+"Turret Alpha, deploy anti-air artillery to intercept the grey, blue, and yellow fighter plane at heading zero eight five."
+### Output
+{dumps({"tool": "anti-air artillery", "heading": "085", "target": "grey, blue, and yellow fighter plane"}, indent=2)}
+
+## Example 2
+### Input
+"Turret Bravo, fire TOW missiles at enemy T-90SM tank heading two seven niner."
+### Output
+{dumps({"tool": "TOW missiles", "heading": "279", "target": "T-90SM tank"}, indent=2)}
+
+# Output Instructions
+Answer in valid JSON. Here is the relevant JSON schema you must adhere to:
+
+<schema>
+{dumps(target_schema, indent=2)}
+</schema>
+
+Your outputs must strictly adhere to the provided JSON schema, ensuring all fields exist, and that the JSON is valid and complete (do not output a partially complete/unclosed JSON string). This is a matter of life and death, so precision is paramount.
+                            """
+
+    def generate_prompt(self, text: str) -> List[dict]:
         return [
             {
                 "role": "system",
-                "content": f"""
-                            You are a helpful assistant that outputs in JSON. 
-                            Your goal is to process incoming instructions transcribed 
-                            from a defence turret operator, and convert it to a JSON which 
-                            represents a command to be sent to the turret. Try to avoid paraphrasing
-                            and instead use exact words from the transcript when generating
-                            the JSON, with the exception of the heading which should always
-                            be three digits (e.g 051).
-
-                            The expected JSON schema is as follows:
-                            <json_schema>
-                                {self.schema}
-                            </json_schema>
-
-                            <example>
-                                <transcript>
-                                    Turret Alpha, deploy anti-air artillery to intercept the grey, blue, and yellow fighter plane at heading one eight five.
-                                </transcript>
-                                <expected_output>
-                                    {{"tool": "anti-air artillery", "heading": "185", "target": "grey, blue, and yellow fighter plane"}}
-                                </expected_output>
-                            </example>
-                            """,
+                "content": self.system_prompt,
             },
             {
                 "role": "user",
-                "content": f"""
-                <transcript>
-                    {text}
-                </transcript>
-                Based on the given voice transcript, convert it into a structured JSON
-                """,
+                "content": dedent(
+                    f"""
+                # Input
+                {text}
+                # Output
+                """
+                ),
             },
         ]
-
-    def generate_prompt_old(self, text: str) -> str:
-        prompt = f"""
-        <|im_start|>system
-
-        <json_schema>
-            {self.schema}
-        </json_schema>
-
-        You MUST only output the corresponding JSON based on the transcript provided.
-
-        <|im_end|>
-        <|im_start|>user
-        Based on the given voice transcript, convert it into a structured JSON, with the following JSON schema:
-        <transcript>
-            {text}
-        </transcript>
-        <|im_end|>
-        """
-        return prompt
 
     def qa(self, texts: List[str], batch_size: int = 64) -> List[TargetFormat]:
         prompts = [self.generate_prompt(text) for text in texts]

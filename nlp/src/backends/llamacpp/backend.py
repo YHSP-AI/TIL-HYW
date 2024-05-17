@@ -12,7 +12,7 @@ from lmformatenforcer.integrations.llamacpp import (
 )
 
 from src.backends.base import NLPInferenceBackend
-from src.schema import target_schema
+from src.schema import target_schema, TargetFormat
 
 
 class LCPPInferenceBackend(NLPInferenceBackend):
@@ -30,9 +30,16 @@ class LCPPInferenceBackend(NLPInferenceBackend):
 
         # Use LM Format Enforcer to force output
         # to conform to JSON schema
-        self.llm = Llama(model_path=self.path, n_gpu_layers=-1, draft_model=LlamaPromptLookupDecoding(), n_ctx=4096)
+        self.llm = Llama(
+            model_path=self.path,
+            n_gpu_layers=-1,
+            draft_model=LlamaPromptLookupDecoding(),
+            n_ctx=2048,
+        )
         self.tokenizer_data = build_token_enforcer_tokenizer_data(self.llm)
-        self.schema = JsonSchemaParser(target_schema)
+        self.schema = JsonSchemaParser(
+            target_schema, num_consecutive_whitespaces=6
+        )
         self.logits_processors = LogitsProcessorList(
             [build_llamacpp_logits_processor(self.tokenizer_data, self.schema)]
         )
@@ -40,25 +47,32 @@ class LCPPInferenceBackend(NLPInferenceBackend):
     def infer(self, inputs: List[List[dict]], **kwargs) -> List[str]:
         # NOTE: LCPP Python bindings don't support batched inference yet
         predictions = []
+        failed = 0
         for prompt in inputs:
-            attempt = 3
+            # https://github.com/NousResearch/Hermes-Function-Calling/blob/main/jsonmode.py
+            # TODO: recursively attempt to resolve JSON validation errors on model end
+            attempt = 1
             while True:
                 try:
                     output = self.llm.create_chat_completion(
                         messages=prompt,
                         logits_processor=self.logits_processors,
+                        temperature=0
                     )
-                    # output = self.llm(prompt, logits_processor=self.logits_processors, max_tokens=256, temperature=0.5)
                     text: str = output["choices"][0]["message"]["content"]
-                    json.loads(text)
+                    TargetFormat.model_validate_json(text)
                     break
-                except json.JSONDecodeError as e:
-                    print(text)
+                except Exception as e:
+                    print(e)
                     attempt -= 1
                     if attempt == 0:
+                        print(text)
                         text = json.dumps(
-                            {"tool": "", "heading": "", "target": ""}
+                            {"tool": "", "heading": "000", "target": ""}
                         )
+                        failed += 1
                         print("Failed to generate")
+                        break
             predictions.append(text)
+        print("Failed Preds: ", failed)
         return predictions

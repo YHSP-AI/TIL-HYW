@@ -21,9 +21,9 @@ class InferenceRequest(BaseModel):
 
 
 class TargetFormat(BaseModel):
-    target: str
-    tool: str
-    heading: str = Field(pattern="[0-9][0-9][0-9]")
+    target: str = Field(description="The verbatim description of the enemy to be targeted, as stated in the operator's transcript.")
+    tool: str = Field(description="The verbatim name of the weapon or tool to be used against the target, as stated in the operator's transcript.")
+    heading: str = Field(pattern="[0-9][0-9][0-9]", description="The 3-digit compass bearing (between 000 and 360) indicating the direction of the target, specified as a number.")
 
 
 target_schema = TargetFormat.model_json_schema()
