@@ -23,25 +23,21 @@ When processing a transcript, use the verbatim wording from the operator wheneve
 Here are some examples of valid operator transcripts and their expected JSON outputs:
 
 ## Example 1
-### Input
-"Turret Alpha, deploy anti-air artillery to intercept the grey, blue, and yellow fighter plane at heading zero eight five."
-### Output
-{dumps({"tool": "anti-air artillery", "heading": "085", "target": "grey, blue, and yellow fighter plane"}, indent=2)}
+Input: "Turret Alpha, deploy anti-air artillery to intercept the grey, blue, and yellow fighter plane at heading zero eight five."
+Output: {{"tool": "anti-air artillery", "heading": "085", "target": "grey, blue, and yellow fighter plane"}}
 
 ## Example 2
-### Input
-"Turret Bravo, fire TOW missiles at enemy T-90SM tank heading two seven niner."
-### Output
-{dumps({"tool": "TOW missiles", "heading": "279", "target": "T-90SM tank"}, indent=2)}
+Input: "Turret Bravo, fire TOW missiles at enemy T-90SM tank heading two seven niner."
+Output: {{"tool": "TOW missiles", "heading": "279", "target": "T-90SM tank"}}
 
 # Output Instructions
 Answer in valid JSON. Here is the relevant JSON schema you must adhere to:
 
 <schema>
 {dumps(target_schema, indent=2)}
-</schema>
+<schema>
 
-Your outputs must strictly adhere to the provided JSON schema, ensuring all fields exist, and that the JSON is valid and complete (do not output a partially complete/unclosed JSON string). This is a matter of life and death, so precision is paramount.
+Your outputs must strictly adhere to the provided JSON schema, ensuring all fields exist, and that the JSON is valid and complete. This is a matter of life and death, so precision is paramount.
                             """
 
     def generate_prompt(self, text: str) -> List[dict]:
@@ -54,9 +50,8 @@ Your outputs must strictly adhere to the provided JSON schema, ensuring all fiel
                 "role": "user",
                 "content": dedent(
                     f"""
-                # Input
-                {text}
-                # Output
+                Input: {text}
+                Output:
                 """
                 ),
             },
