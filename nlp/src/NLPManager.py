@@ -1,3 +1,5 @@
+from typing import List
+
 from src.schema import target_schema, TargetFormat
 from src.config import Settings
 from src.backends import InferenceBackendFactory
@@ -70,7 +72,7 @@ class NLPManager:
         """
         return prompt
 
-    def qa(self, texts: list[str], batch_size: int = 64) -> list[TargetFormat]:
+    def qa(self, texts: List[str], batch_size: int = 64) -> List[TargetFormat]:
         prompts = [self.generate_prompt(text) for text in texts]
         predictions = self.backend.infer(prompts, batch_size=batch_size)
         # Convert to JSON

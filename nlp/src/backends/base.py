@@ -1,4 +1,5 @@
 from abc import ABC
+from typing import List
 
 class NLPInferenceBackend(ABC):
     def __init__(self, **kwargs):
@@ -7,8 +8,8 @@ class NLPInferenceBackend(ABC):
 
     def infer(
             self,
-            inputs: list[list[dict]],
+            inputs: List[List[dict]],
             batch_size: int = 128,
             **kwargs
-    ) -> list[str]:
+    ) -> List[str]:
         return []

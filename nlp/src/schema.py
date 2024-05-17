@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import List
 
 from pydantic import BaseModel, Field
 
@@ -16,7 +17,7 @@ class InferenceInput(BaseModel):
 
 
 class InferenceRequest(BaseModel):
-    instances: list[InferenceInput]
+    instances: List[InferenceInput]
 
 
 class TargetFormat(BaseModel):
@@ -26,5 +27,3 @@ class TargetFormat(BaseModel):
 
 
 target_schema = TargetFormat.model_json_schema()
-
-print(target_schema)

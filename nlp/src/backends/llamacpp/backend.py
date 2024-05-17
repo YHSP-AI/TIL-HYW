@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+from typing import List
 
 from llama_cpp import Llama, LogitsProcessorList
 from llama_cpp.llama_speculative import LlamaPromptLookupDecoding
@@ -36,7 +37,7 @@ class LCPPInferenceBackend(NLPInferenceBackend):
             [build_llamacpp_logits_processor(self.tokenizer_data, self.schema)]
         )
 
-    def infer(self, inputs: list[list[dict]], **kwargs) -> list[str]:
+    def infer(self, inputs: List[List[dict]], **kwargs) -> List[str]:
         # NOTE: LCPP Python bindings don't support batched inference yet
         predictions = []
         for prompt in inputs:
