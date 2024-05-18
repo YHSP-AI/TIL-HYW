@@ -20,7 +20,7 @@ data = dict(info = dict(   description= "TIL Data",
     url= "http://cocodataset.org",
     version= "1.0",
     year= 2017,
-    contributor= "COCO Consortium",
+    contributor= "TIL",
     date_created= "2017/09/01") , licenses = [] , images = [] , annotations=[] , categories = [])
 
 
@@ -63,3 +63,6 @@ with open(input_file, 'r') as f:
 
 print(data['images'][0])
 print(data['annotations'][0])
+
+with open('TIL COCO.json','w') as f:
+    json.dump(data  , f )
