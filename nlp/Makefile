@@ -7,6 +7,11 @@ dev:
 	source venv/bin/activate && \
 	fastapi dev src/api_service.py --port 5002
 
+run:
+	source venv/bin/activate && \
+	uvicorn src.api_service:app --port 5002 --host 0.0.0.0
+
+
 build:
 	docker build . -t hyw-nlp
 
