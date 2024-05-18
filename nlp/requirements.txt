@@ -8,3 +8,4 @@ transformers==4.37.0
 torch
 huggingface_hub
 # vllm
+peft

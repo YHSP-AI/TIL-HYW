@@ -6,8 +6,8 @@ from pydantic_settings import BaseSettings
 from src.schema import InferenceBackend
 
 class Settings(BaseSettings):
-    model_path: Union[Path, str] = "src/models/Hermes-2-Pro-Llama-3-Instruct-Merged-DPO-Q4_K_M.gguf"
-    inference_backend: InferenceBackend = InferenceBackend.LCPP
+    model_path: Union[Path, str] = "src/models/flan-t5-lora"
+    inference_backend: InferenceBackend = InferenceBackend.HF
     batch_size: int = Field(64, ge=1)
 
 def get_config():

@@ -2,7 +2,7 @@ from textwrap import dedent
 from typing import List
 from json import dumps
 
-from src.schema import target_schema, TargetFormat
+from src.schema import target_schema, TargetFormat, InferenceBackend
 from src.config import Settings
 from src.backends import InferenceBackendFactory
 
@@ -58,7 +58,10 @@ Your outputs must strictly adhere to the provided JSON schema, ensuring all fiel
         ]
 
     def qa(self, texts: List[str], batch_size: int = 64) -> List[TargetFormat]:
-        prompts = [self.generate_prompt(text) for text in texts]
+        if self.config.inference_backend == InferenceBackend.HF:
+            prompts = texts
+        else:
+            prompts = [self.generate_prompt(text) for text in texts]
         predictions = self.backend.infer(prompts, batch_size=batch_size)
         # Convert to JSON
         return [
