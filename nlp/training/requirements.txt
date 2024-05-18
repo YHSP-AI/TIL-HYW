@@ -6,3 +6,6 @@ nltk
 bitsandbytes
 datasets
 accelerate
+peft
+sentencepiece
+evaluate

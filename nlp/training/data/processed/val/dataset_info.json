@@ -33,7 +33,21 @@
       "dtype": "string",
       "_type": "Value"
     },
-    "label": {
+    "input_ids": {
+      "feature": {
+        "dtype": "int32",
+        "_type": "Value"
+      },
+      "_type": "Sequence"
+    },
+    "attention_mask": {
+      "feature": {
+        "dtype": "int8",
+        "_type": "Value"
+      },
+      "_type": "Sequence"
+    },
+    "labels": {
       "feature": {
         "dtype": "int64",
         "_type": "Value"
