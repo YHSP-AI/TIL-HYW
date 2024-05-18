@@ -6,7 +6,7 @@ from pydantic_settings import BaseSettings
 from src.schema import InferenceBackend
 
 class Settings(BaseSettings):
-    model_path: Union[Path, str] = "src/models/flan-t5-lora"
+    model_path: Union[Path, str] = "src/models/flan-t5-base-lora-rslora-v1.1"
     inference_backend: InferenceBackend = InferenceBackend.HF
     batch_size: int = Field(64, ge=1)
 
