@@ -38,7 +38,7 @@ with open(input_file, 'r') as f:
 
         img = Image.open(os.path.join('images',data['image']))
         width, height = img.size
-        img = dict( filename = os.path.abspath(data['image']), height = height , width= width , detection = dict( instances = []))
+        img = dict( filename = os.path.abspath(os.path.join('images',data['image'])), height = height , width= width , detection = dict( instances = []))
         for annotation in data['annotations']:
             cat_name = annotation['caption']
             img['detection']['instances'].append( dict(bbox = annotation['bbox'],label= category_mapping[cat_name] , category = cat_name))

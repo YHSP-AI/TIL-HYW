@@ -44,7 +44,7 @@ class ODVGDataset(BaseDetDataset):
             data_info['width'] = data['width']
             if self.dataset_mode == 'OD':
                 if self.need_text:
-                    data_info['text'] = self.label_map
+                    data_info['text'] = list(self.label_map.keys() )
                 anno = data.get('detection', {})
                 instances = [obj for obj in anno.get('instances', [])]
                 bboxes = [obj['bbox'] for obj in instances]

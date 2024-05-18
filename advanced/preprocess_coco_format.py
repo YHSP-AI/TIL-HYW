@@ -29,6 +29,8 @@ for cat_name,cat_id in category_mapping.items():
 
 
 
+i =0
+
 
 
 
@@ -39,19 +41,21 @@ with open(input_file, 'r') as f:
         img = Image.open(os.path.join('images',original_data['image']))
         width, height = img.size
         img_id = int(original_data['image'].replace('.jpg','').split('_')[1])
-        data['images'].append(dict( file_name = os.path.abspath(original_data['image']),
+
+        data['images'].append(dict( file_name = os.path.abspath(os.path.join('image',original_data['image'])),
                                   height = height , width= width , id  = img_id ,
                                   coco_url = '',
                                   date_captured = "2017/09/01"))
 
 
-        for i,annotation in enumerate(original_data['annotations']):
+        for annotation in original_data['annotations']:
             cat_name = annotation['caption']
             data['annotations'].append( dict(bbox = annotation['bbox'],
                                              category_id= category_mapping[cat_name] ,
                                              iscrowd = 0 ,
                                              area = calculate_area(annotation['bbox']) ,
-                                             image_id = img_id))
+                                             image_id = img_id , id =i))
+            i+=1
 
 # print(images[0])
 # import jsonlines

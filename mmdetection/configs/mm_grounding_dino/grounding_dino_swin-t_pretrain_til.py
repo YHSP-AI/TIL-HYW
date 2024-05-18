@@ -207,7 +207,12 @@ train_dataloader = dict(
     dataset=dict(type='ConcatDataset', datasets=[coco_od_dataset]))
 
 val_dataloader =dict(
-    dataset=dict(pipeline=test_pipeline, return_classes=True , ann_file = ''))
+    dataset=dict(pipeline=test_pipeline, return_classes=True  , data_root = data_root, ann_file = 'TIL COCO.json'))
+
+
+val_evaluator = dict(
+    ann_file=data_root + '/TIL COCO.json')
+test_evaluator = val_evaluator
 test_dataloader = val_dataloader
 
 optim_wrapper = dict(
