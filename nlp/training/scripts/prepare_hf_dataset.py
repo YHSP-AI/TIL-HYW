@@ -115,13 +115,16 @@ def process_example(example):
         [label_to_class[x] for x in label_names], word_ids
     )
 
-    example["label"] = new_labels
+    inputs["labels"] = new_labels
 
-    return example
+
+    return inputs
 
 
 def main(
-    raw_data_path: Annotated[Path, typer.Argument(dir_okay=False, exists=True)] = "./data/train.jsonl",
+    raw_data_path: Annotated[
+        Path, typer.Argument(dir_okay=False, exists=True)
+    ] = "./data/train.jsonl",
     output_dir: Annotated[Path, typer.Argument()] = "./data/processed/train",
 ):
     # Create HF dataset (with optional train val split (?))
@@ -139,14 +142,9 @@ def main(
     for i in range(min(len(dataset), 5)):
         typer.echo(dataset[i])
 
-
     # Save to output dir
     typer.echo(f"Saving to directory: {output_dir}")
-    dataset.save_to_disk(
-        str(output_dir)
-    )
-
-    
+    dataset.save_to_disk(str(output_dir))
 
 
 if __name__ == "__main__":
