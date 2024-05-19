@@ -159,6 +159,13 @@ train_pipeline = [
     #     tokenizer_name=lang_model_name,
     #     num_sample_negative=85,
     #     max_tokens=256),
+    # dict(
+    #     type='RandomSamplingNegPos',
+    #     tokenizer_name=lang_model_name,
+    #     num_sample_negative=85,
+    #     # change this
+    #     label_map_file='/home/jupyter/TIL Competition Codes/TIL-HYW/advanced/mm_grounding_dino_category_mapping.json',
+    #     max_tokens=256),
     dict(
         type='PackDetInputs',
         meta_keys=('img_id', 'img_path', 'ori_shape', 'img_shape',
@@ -194,14 +201,15 @@ coco_od_dataset = dict(
     data_prefix=dict(img=''),
     filter_cfg=dict(filter_empty_gt=False),
     pipeline=train_pipeline,
+    need_text = True,
     return_classes=True,
     backend_args=None)
 
 train_dataloader = dict(
     _delete_=True,
-    batch_size=4,
-    num_workers=4,
-    persistent_workers=True,
+    batch_size=2,
+    num_workers=0,
+    persistent_workers=False,
     sampler=dict(type='DefaultSampler', shuffle=True),
     batch_sampler=dict(type='AspectRatioBatchSampler'),
     dataset=dict(type='ConcatDataset', datasets=[coco_od_dataset]))
@@ -224,7 +232,7 @@ optim_wrapper = dict(
     paramwise_cfg=dict(
         custom_keys={
             'absolute_pos_embed': dict(decay_mult=0.),
-            'backbone': dict(lr_mult=0.1),
+            'backbone': dict(lr_mult=0.0),
             'language_model': dict(lr_mult=0.1),
         }))
 

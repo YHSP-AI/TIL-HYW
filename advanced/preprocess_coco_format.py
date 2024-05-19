@@ -15,7 +15,7 @@ images = []
 unique_categories = set()
 
 with open('mm_grounding_dino_category_mapping.json') as f:
-    category_mapping = json.load(f)
+    category_mapping = {v:k for k,v in json.load(f).items()}
 data = dict(info = dict(   description= "TIL Data",
     url= "http://cocodataset.org",
     version= "1.0",
@@ -42,7 +42,7 @@ with open(input_file, 'r') as f:
         width, height = img.size
         img_id = int(original_data['image'].replace('.jpg','').split('_')[1])
 
-        data['images'].append(dict( file_name = os.path.abspath(os.path.join('image',original_data['image'])),
+        data['images'].append(dict( file_name = os.path.abspath(os.path.join('images',original_data['image'])),
                                   height = height , width= width , id  = img_id ,
                                   coco_url = '',
                                   date_captured = "2017/09/01"))

@@ -35,13 +35,18 @@ id2cat = { v:k for k,v in category_mapping.items() }
 
 with open(input_file, 'r') as f:
     for line in f:
+        data = json.loads(line)
 
         img = Image.open(os.path.join('images',data['image']))
         width, height = img.size
         img = dict( filename = os.path.abspath(os.path.join('images',data['image'])), height = height , width= width , detection = dict( instances = []))
         for annotation in data['annotations']:
             cat_name = annotation['caption']
-            img['detection']['instances'].append( dict(bbox = annotation['bbox'],label= category_mapping[cat_name] , category = cat_name))
+
+            x1,y1,box_width,box_height = annotation['bbox']
+            bbox= [x1,y1, x1 + box_width, y1+box_height]
+            print(bbox)
+            img['detection']['instances'].append( dict(bbox = bbox,label= category_mapping[cat_name] , category = cat_name))
         images.append(img)
 
 # print(images[0])
@@ -52,5 +57,5 @@ with jsonlines.open('mm_grounding_format.jsonl','w') as f:
     f.write_all(images)
 
 with open('mm_grounding_dino_category_mapping.json' , 'w') as f:
-    json.dump(category_mapping, f)
+    json.dump(id2cat, f)
 
