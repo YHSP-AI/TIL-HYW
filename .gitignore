@@ -172,3 +172,6 @@ src/gcloud/*.json./vlm/src/Open-GroundingDino/logs/checkpoint0001.pth
 ./vlm/src/Open-GroundingDino/bert-base-uncased/tf_model.h5
 ./vlm/src/Open-GroundingDino/models/GroundingDINO/ops/cuda-repo-debian10-12-4-local_12.4.1-550.54.15-1_amd64.deb
 ./.git/objects/pack/pack-c02f9b88bd8d4510863120e37735b5e517865fe2.pack
+./vlm/src/Open-GroundingDino/logs/checkpoint0001.pth
+./vlm/src/Open-GroundingDino/models/GroundingDINO/ops/cuda-repo-debian10-12-4-local_12.4.1-550.54.15-1_amd64.deb
+./.git/objects/pack/pack-c02f9b88bd8d4510863120e37735b5e517865fe2.pack
