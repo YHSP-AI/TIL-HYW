@@ -82,18 +82,27 @@ class NLPManager:
         return -1
 
 
-    def find_number(self,txt:list):
+    def find_number(self,txt:list , mode = '=='):
+
+        # locations = {}
+        func = self.all_toolsfind_index if mode == '==' else self.all_toolsfind_index_in
         # locations = {}
         min_index = float('inf')
         min_number = ''
         for number in self.numbers:
-            location    = self.find_index(txt , number)
+            location    = func(txt , number)
             if location != -1:
                 if location < min_index:
                     min_index = location
                     min_number = number
 
-                # locations[location] = number
+
+
+        # if mode != '==':
+            # print('min index',min_index )
+            # print('min_number' , min_number)
+
+
 
         return min_index , min_number
 
