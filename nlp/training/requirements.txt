@@ -1,0 +1,11 @@
+typer
+transformers
+torch
+huggingface_hub
+nltk
+bitsandbytes
+datasets
+accelerate
+peft
+sentencepiece
+evaluate

@@ -1,0 +1,75 @@
+{
+  "builder_name": "json",
+  "citation": "",
+  "config_name": "default",
+  "dataset_name": "json",
+  "dataset_size": 531329,
+  "description": "",
+  "download_checksums": {
+    "/home/tiencheng/Projects/TIL-HYW/nlp/training/data/train.jsonl": {
+      "num_bytes": 667419,
+      "checksum": null
+    }
+  },
+  "download_size": 667419,
+  "features": {
+    "key": {
+      "dtype": "int64",
+      "_type": "Value"
+    },
+    "transcript": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "tool": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "heading": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "target": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "input_ids": {
+      "feature": {
+        "dtype": "int32",
+        "_type": "Value"
+      },
+      "_type": "Sequence"
+    },
+    "attention_mask": {
+      "feature": {
+        "dtype": "int8",
+        "_type": "Value"
+      },
+      "_type": "Sequence"
+    },
+    "labels": {
+      "feature": {
+        "dtype": "int64",
+        "_type": "Value"
+      },
+      "_type": "Sequence"
+    }
+  },
+  "homepage": "",
+  "license": "",
+  "size_in_bytes": 1198748,
+  "splits": {
+    "train": {
+      "name": "train",
+      "num_bytes": 531329,
+      "num_examples": 2800,
+      "dataset_name": "json"
+    }
+  },
+  "version": {
+    "version_str": "0.0.0",
+    "major": 0,
+    "minor": 0,
+    "patch": 0
+  }
+}
