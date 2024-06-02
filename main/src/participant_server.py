@@ -9,6 +9,9 @@ from finals_manager import FinalsManager
 from auto_manager import AutoManager
 from mock_manager import MockManager
 from models_manager import ModelsManager
+from dotenv import load_dotenv
+
+load_dotenv()
 
 TEAM_NAME = os.getenv("TEAM_NAME", "Team Name")
 LOCAL_IP = os.getenv("LOCAL_IP", "0.0.0.0")

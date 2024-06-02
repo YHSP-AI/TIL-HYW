@@ -15,6 +15,7 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 logger.addHandler(logging.StreamHandler())
 
+
 prefix: str = "results/"
 TEAM_NAME: str = os.getenv("TEAM_NAME", "team-name")
 
