@@ -53,7 +53,7 @@ class HFInferenceBackend(NLPInferenceBackend):
         self.id2label = {v: k for k, v in self.label2id.items()}
 
         config = PeftConfig.from_pretrained(self.path)
-        self.device = "cuda" if is_available else "cpu"
+        self.device = "cuda" if is_available() else "cpu"
         self.model = AutoModelForTokenClassification.from_pretrained(
             config.base_model_name_or_path,
             torch_dtype="auto",

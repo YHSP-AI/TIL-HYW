@@ -2,10 +2,7 @@ fastapi
 pydantic
 pydantic-settings
 lm-format-enforcer
-llama-cpp-python
-# exllamav2
 transformers
 torch
 huggingface_hub
-# vllm
 peft

@@ -27,5 +27,11 @@ COPY src src
 # ADD https://huggingface.co/NousResearch/Hermes-2-Theta-Llama-3-8B-GGUF/resolve/main/Hermes-2-Pro-Llama-3-Instruct-Merged-DPO-Q4_K_M.gguf?download=true src/models/Hermes-2-Pro-Llama-3-Instruct-Merged-DPO-Q4_K_M.gguf
 COPY training/output/flan-t5-lora-v1/flan-t5-base-lora-rslora-v1.1 src/models/flan-t5-base-lora-rslora-v1.1
 
+COPY cache_models.py .
+
+RUN python cache_models.py
+
+ENV HF_HUB_OFFLINE 1
+
 # start model service
 CMD uvicorn src.api_service:app --port 5002 --host 0.0.0.0

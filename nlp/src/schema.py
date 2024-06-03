@@ -6,9 +6,7 @@ from pydantic import BaseModel, Field
 
 class InferenceBackend(str, Enum):
     HF = "transformers"
-    LCPP = "llamacpp"
-    EXLV2 = "exllamav2"
-    VLLM = "vllm"
+
 
 
 class InferenceInput(BaseModel):

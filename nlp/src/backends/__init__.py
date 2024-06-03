@@ -1,6 +1,5 @@
 from typing import Dict
 
-from src.backends.llamacpp.backend import LCPPInferenceBackend
 from src.backends.hf.backend import HFInferenceBackend
 from src.backends.base import NLPInferenceBackend
 from src.schema import InferenceBackend
@@ -8,7 +7,6 @@ from src.schema import InferenceBackend
 
 class InferenceBackendFactory:
     backends: Dict[InferenceBackend, NLPInferenceBackend] = {
-        InferenceBackend.LCPP: LCPPInferenceBackend,
         InferenceBackend.HF: HFInferenceBackend,
     }
 
