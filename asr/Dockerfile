@@ -23,6 +23,12 @@ RUN pip install -r requirements.txt
 # copy the rest of the files into the container
 COPY src .
 
+COPY cache_model.py .
+
+RUN python cache_model.py
+
+ENV HF_HUB_OFFLINE 1
+
 
 # start model service
 CMD uvicorn api_service:app --port 5001 --host 0.0.0.0
