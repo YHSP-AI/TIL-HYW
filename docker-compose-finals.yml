@@ -1,7 +1,10 @@
 services:
   til-main:
-    build: main/
-    image: til_main:v0.0.1
+    # TO DO - REPLACE WITH DOCKERIMAGE-main:finals
+    image: asia-southeast1-docker.pkg.dev/dsta-angelhack/repository-hyw/hyw-main:finals
+    # image: asia-southeast1-docker.pkg.dev/dsta-angelhack/repository-hyw/hyw-main:latest
+    # image: hyw-main:finals
+    # image: til-main:finals
     environment:
       - COMPETITION_SERVER_IP=${COMPETITION_SERVER_IP}
       - COMPETITION_SERVER_PORT=${COMPETITION_SERVER_PORT}
@@ -21,13 +24,14 @@ services:
       til-autonomy:
         condition: service_healthy
         restart: true
-      til-vlm:
-        condition: service_healthy
-        restart: true
+      # til-vlm:
+      #   condition: service_healthy
+      #   restart: true
     command: ["python", "participant_server.py"]
   til-asr:
-    build: asr/
-    image: til_asr:v0.0.1
+    # TO DO - REPLACE WITH DOCKERIMAGE-asr:finals
+    image: asia-southeast1-docker.pkg.dev/dsta-angelhack/repository-hyw/hyw-asr:finals
+    # image: asia-southeast1-docker.pkg.dev/dsta-angelhack/repository-hyw/hyw-asr:latest
     container_name: til-asr
     environment:
       NVIDIA_VISIBLE_DEVICES: 0
@@ -52,8 +56,9 @@ services:
       retries: 5
       start_period: 3s
   til-nlp:
-    build: nlp/
-    image: til_nlp:v0.0.1
+    # TO DO - REPLACE WITH DOCKERIMAGE-nlp:finals
+    image: asia-southeast1-docker.pkg.dev/dsta-angelhack/repository-hyw/hyw-nlp:finals
+    # image: asia-southeast1-docker.pkg.dev/dsta-angelhack/repository-hyw/hyw-nlp:latest
     container_name: til-nlp
     environment:
       NVIDIA_VISIBLE_DEVICES: 0
@@ -70,7 +75,7 @@ services:
             - driver: nvidia
               count: 1
               capabilities: [gpu]
-    command: ["uvicorn", "api_service:app", "--host", "0.0.0.0", "--port", "5002"]
+    # command: ["uvicorn", "src.api_service:app", "--host", "0.0.0.0", "--port", "5002"]
     healthcheck:
       test: curl -f http://localhost:5002/health || exit 1
       interval: 5s
@@ -78,8 +83,11 @@ services:
       retries: 5
       start_period: 3s
   til-autonomy:
-    build: autonomy/
-    image: til_autonomy:v0.0.1
+    # TO DO - REPLACE WITH DOCKERIMAGE-autonomy:finals
+    image: asia-southeast1-docker.pkg.dev/dsta-angelhack/repository-hyw/hyw-autonomy:finals
+    # image: asia-southeast1-docker.pkg.dev/dsta-angelhack/repository-hyw/hyw-autonomy:latest
+    # image: hyw-autonomy:finals
+    # image: til-autonomy:finals
     stdin_open: true
     tty: true
     environment:
@@ -104,8 +112,10 @@ services:
       retries: 5
       start_period: 3s
   til-vlm:
-    build: vlm/
-    image: til_vl:v0.0.1
+    # TO DO - REPLACE WITH DOCKERIMAGE-vlm:finals
+    image: asia-southeast1-docker.pkg.dev/dsta-angelhack/repository-hyw/hyw-vlm:finals
+    # image: asia-southeast1-docker.pkg.dev/dsta-angelhack/repository-hyw/hyw-vlm:latest
+    # image: asia-southeast1-docker.pkg.dev/dsta-angelhack/repository-marcus-rocks-1/til-vlm:finals
     container_name: til-vlm
     environment:
       NVIDIA_VISIBLE_DEVICES: 0
@@ -123,9 +133,9 @@ services:
               count: 1
               capabilities: [gpu]
     command: ["uvicorn", "api_service:app", "--host", "0.0.0.0", "--port", "5004"]
-    healthcheck:
-      test: curl -f http://localhost:5004/health || exit 1
-      interval: 5s
-      timeout: 30s
-      retries: 5
-      start_period: 3s
+    # healthcheck:
+    #   test: curl -f http://localhost:5004/health || exit 1
+    #   interval: 5s
+    #   timeout: 30s
+    #   retries: 5
+    #   start_period: 3s
