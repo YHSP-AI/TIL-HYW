@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import List
+from typing import List, Optional
 
 from pydantic import BaseModel, Field
 
@@ -10,7 +10,7 @@ class InferenceBackend(str, Enum):
 
 
 class InferenceInput(BaseModel):
-    key: int
+    key: Optional[int] = None
     transcript: str
 
 
